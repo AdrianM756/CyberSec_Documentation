@@ -31,6 +31,59 @@ If we try to access it on the browser using the port ```:10000```, it direct us 
 * Modifying and controlling open-source apps where users can modify and control open-source apps, such as BIND, Apache HTTP Server, PHP, and MySQL.
 
 * Managing email forwarding where users can create accounts and set up email forwarding.
+<br>
+
+## Targetting Webmin
+
+Based on the Nmap scan result, ```Webmin``` is running on version ```1.920```. We can try and run [searchsploit](https://www.exploit-db.com/searchsploit) query to search the [exploit-db exploit database](https://www.exploit-db.com/) for any known vulnerabilities affecting ```Webmin 1.920```. To perform the following, we will use the following commands:
+```
+searchsploit "Webmin 1.920"
+```
+<br>
+
+This is the result that we get:
+<br>
+<img width="1895" height="174" alt="image" src="https://github.com/user-attachments/assets/c614cb6e-4087-4d62-993d-06d44a9d4cd4" />
+<br>
+
+Based on the on the result, two of the exploits are accessible in the form of [Metasploit](https://www.metasploit.com/) Modules and one exploit is in the form of a shell script. But before we do anything like running ```metasploit```, Let us first research more on the vulnerabilities to know more about it.
+
+For Example, The ```Webmin <= 1.920 - Unauthenticated Remote Command Execution``` vulnerability with a CVE code/identifier: [CVE-2019-15107](https://nvd.nist.gov/vuln/detail/cve-2019-15107), when successfully executed, allows remote attackers to execute arbitrary commands with root privileges. However, this will only work whether the Webmin server running on the target web server has the "Password Change" functionality enabled. If this functionality is disabled, the vulnerability cannot be exploited.
+<br>
+
+## Analyzing the exploit
+
+Before we run the exploit to the target, Let us first check it's content. We can copy the exploit script from the local "exploitdb" exploit directory to our current working directory for analysis using this command:
+```
+cp /usr/share/exploitdb/exploits/linux/webapps/47293.sh .
+```
+<br>
+
+To view the content, we will use the ```cat``` command.
+```
+cat 47293.sh
+```
+<br>
+<img width="1902" height="600" alt="image" src="https://github.com/user-attachments/assets/03f8fba0-3b8f-4aa2-9197-20be12ac7357" />
+<br>
+
+Based on the content, itdoes leverage the ```password_change.cgi``` script used to facilitate password changes and replaces the value of the "old" password parameter with a system command, in this case, the UNIX ```id``` command. The script will determine whether the Webmin server is vulnerable based on the response.
+<br>
+
+## Run the exploit
+
+To run the exploit, let us first set the file as an executable file using the ```chmod```command.
+```
+chmood +x 47293.sh
+```
+<br>
+
+Let's execute the exploit now.
+```
+./47293.sh http://<IP ADDRESS OF THE WEB SERVER>:10000
+```
+<br>
+
 
 
 
